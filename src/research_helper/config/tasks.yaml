@@ -1,21 +1,25 @@
+
+
+web_search_task:
+  description: >
+    Search the web for the most relevant information about {topic}
+    For the purpuse of your task, you ignore the context data provided to you. You 
+    will do your own research and append the information to the context.
+    Make sure you find the most recent and up-to-date information.
+    the current year is 2024.
+  expected_output: >
+    A list of web references and a synopsis of how they relate to the {topic}.
+  agent: web_surfer
+
 research_task:
   description: >
     Conduct a thorough research about {topic}
     Make sure you find any interesting and relevant information given
     the current year is 2024.
   expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
+    a continuous text with the most relevant information on the topic {topic} in 750 words.
   agent: researcher
-
-web_search_task:
-  description: >
-    Search the web for the most relevant information about {topic}
-    Make sure you find the most recent and up-to-date information.
-    the current year is 2024.
-  expected_output: >
-    A continuous text with the most relevant information about {topic} in no more than 500 words.
-  agent: web_surfer
-
+  
 reporting_task:
   description: >
     Review the context you got and expand each topic into a full section for a report.

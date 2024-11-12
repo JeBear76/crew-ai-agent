@@ -22,6 +22,12 @@ class ResearchHelper():
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
+	@agent
+	def web_surfer(self) -> Agent:
+		return Agent(
+			config=self.agents_config['web_surfer'],
+			verbose=True
+		)
 
 	@agent
 	def researcher(self) -> Agent:
@@ -32,24 +38,10 @@ class ResearchHelper():
 		)
 	
 	@agent
-	def web_surfer(self) -> Agent:
-		return Agent(
-			config=self.agents_config['web_surfer'],
-			verbose=True
-		)
-
-	@agent
 	def reporting_analyst(self) -> Agent:
 		return Agent(
 			config=self.agents_config['reporting_analyst'],
 			verbose=True
-		)
-
-	@task
-	def research_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['research_task'],
-			verbose=True,
 		)
 
 	@task
@@ -59,12 +51,19 @@ class ResearchHelper():
 			tools=[duckducktool],
 			verbose=True,
 		)
+	
+	@task
+	def research_task(self) -> Task:
+		return Task(
+			config=self.tasks_config['research_task'],
+			verbose=True,
+		)
 
 	@task
 	def reporting_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['reporting_task'],
-			output_file='./output/report.md'
+			output_file=f'./output/report.md'
 		)
 
 	@crew
