@@ -64,7 +64,7 @@ class ResearchHelper():
 	def reporting_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['reporting_task'],
-			output_file='report.md'
+			output_file='./output/report.md'
 		)
 
 	@crew
