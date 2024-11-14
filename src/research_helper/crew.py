@@ -7,7 +7,18 @@ from research_helper.tools.custom_tool import DuckDuckGoSearchTool
 
 # Check our tools documentations for more information on how to use them
 # from crewai_tools import SerperDevTool
-duckducktool = DuckDuckGoSearchTool()
+duckducktool = DuckDuckGoSearchTool(result_as_answer=True)
+huggingfavce_llm = LLM(
+	model="huggingface/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF", 
+	api_key=os.getenv("HUGGINGFACE_API_KEY")
+
+)
+
+google_llm=LLM(
+	model="gemini/gemini-1.5-flash", 
+	temperature=0.6, 
+	api_key=os.getenv("GOOGLE_API_KEY"),
+)    
 
 perplexity_llm = LLM(
     model="llama-3.1-sonar-large-128k-online",
@@ -25,8 +36,7 @@ class ResearchHelper():
 	@agent
 	def web_surfer(self) -> Agent:
 		return Agent(
-			config=self.agents_config['web_surfer'],
-			verbose=True
+			config=self.agents_config['web_surfer'],			
 		)
 
 	@agent
@@ -34,35 +44,37 @@ class ResearchHelper():
 		return Agent(
 			config=self.agents_config['researcher'],
 			llm=perplexity_llm,
-			verbose=True			
+			
 		)
 	
 	@agent
 	def reporting_analyst(self) -> Agent:
 		return Agent(
 			config=self.agents_config['reporting_analyst'],
-			verbose=True
+			llm=google_llm,
+			
 		)
 
 	@task
 	def web_search_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['web_search_task'],
-			tools=[duckducktool],
-			verbose=True,
+			tools=[duckducktool],	
+			verbose=True,			
 		)
 	
 	@task
 	def research_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['research_task'],
-			verbose=True,
+			
 		)
 
 	@task
 	def reporting_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['reporting_task'],
+
 			output_file=f'./output/report.md'
 		)
 

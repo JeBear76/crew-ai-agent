@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import requests
 from crewai.tools import BaseTool
+from crewai_tools import ScrapeWebsiteTool
 from langchain_community.tools import DuckDuckGoSearchResults
 
 class DuckDuckGoSearchTool(BaseTool):
@@ -15,5 +16,18 @@ class DuckDuckGoSearchTool(BaseTool):
     )
     
     def _run(self, argument: str) -> str:
-        result = DuckDuckGoSearchResults(num_results=10, output_format='json').invoke(argument)
-        return result
+        result = DuckDuckGoSearchResults(num_results=5, output_format='json').invoke(argument)        
+        siteScraperTool = SiteScraperTool(json.loads(result))
+        result = siteScraperTool.getRawSiteData()
+        return json.dumps(result)
+
+class SiteScraperTool:
+    def __init__(self, sites):
+        self.sites = sites
+        self.tool = ScrapeWebsiteTool()
+
+    def getRawSiteData(self):
+        for site in self.sites:
+            text = self.tool.run(website_url=site['link'])
+            site['snippet'] = text
+        return self.sites
